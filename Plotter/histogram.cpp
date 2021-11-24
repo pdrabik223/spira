@@ -39,8 +39,8 @@ void Histogram::DeclareHistogram() {
     generated_script_.push_back("auto histogram = new TH1I(\"" + plot_label_ +
                                 "\",\"" + plot_title_ + ';' + x_axis_label_ +
                                 ';' + y_axis_label_ + "\"," +
-                                std::to_string(min_bin_.value()) + "," +
                                 std::to_string((int)bin_count_.value()) + "," +
+                                std::to_string(min_bin_.value()) + "," +
                                 std::to_string(max_bin_.value()) + ");");
 
   else {
