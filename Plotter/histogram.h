@@ -7,6 +7,7 @@
 
 #include "map"
 #include "plot.h"
+#include <fstream>
 #include <optional>
 #include <vector>
 
@@ -22,6 +23,17 @@ public:
   /// \param value new bin value
   void AddBin(int bin, double value);
 
+  void GenFile();
+
+
+  std::optional<double> min_bin_;
+  std::optional<double> max_bin_;
+  std::optional<unsigned> bin_count_;
+  std::string plot_label_;
+  std::string x_axis_label_ = "";
+  std::string y_axis_label_ = "";
+
+
 private:
   void ClearScript();
   void AddHeader();
@@ -36,12 +48,6 @@ private:
   void AddCanvasDraw();
   void AddCloseFile();
 
-  std::optional<double> min_bin_;
-  std::optional<double> max_bin_;
-  std::optional<unsigned> bin_count_;
-  std::string plot_label_;
-  std::string x_axis_label_ = "";
-  std::string y_axis_label_ = "";
 
 protected:
   std::string plot_title_;

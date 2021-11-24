@@ -5,7 +5,7 @@
 #ifndef SPIRA_PLOTTER_PLOT_H_
 #define SPIRA_PLOTTER_PLOT_H_
 #include "string"
-
+#include <ciso646>
 
 /// Purely virtual plot class, use as a template for future plot classes
 class Plot {
