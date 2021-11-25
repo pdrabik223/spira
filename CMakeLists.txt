@@ -9,7 +9,7 @@ set(plotter_dir
         Plotter/histogram.h
         Plotter/histogram.cpp
 
-        )
+        Plotter/SubProcess.cpp Plotter/SubProcess.h)
 
 include_directories(Plotter)
 
