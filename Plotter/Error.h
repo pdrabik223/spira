@@ -28,7 +28,7 @@ class Error {
  public:
 
   static Error<T> error(const std::string &err_msg) { return Error<T>(std::nullopt, err_msg); }
-  static Error<T> succes(const T &value) { return Error<T>(value, ""); }
+  static Error<T> success(const T &value) { return Error<T>(value, ""); }
 
   Error(std::optional<T> value, std::string err_msg) :
       error_message_(std::move(err_msg)),
@@ -37,8 +37,8 @@ class Error {
   const std::string &GetError() { return error_message_; };
   const T &GetValue() { return value_.value(); }
 
-  bool IsGood() const { return value_.has_value(); }
-  bool IsError() const { return !IsGood(); }
+  [[nodiscard]] bool IsGood() const { return value_.has_value(); }
+  [[nodiscard]] bool IsError() const { return !IsGood(); }
 
   const T &SuccessOrThrow() {
     if (IsGood())
