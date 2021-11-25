@@ -68,7 +68,7 @@ Error<std::string> SubProcess::ReadChildOutput() {
   if (!ReadFile(child_std_out_reader_, buff, 1024, (LPDWORD) &readc, NULL))
     return Error<std::string>::error("Reading from pipe failed");
   buff[readc] = '\0';
-  return Error<std::string>::succes(buff);
+  return Error<std::string>::success(buff);
 }
 
 Error<void> SubProcess::SendChildInput(const std::string &input) {
