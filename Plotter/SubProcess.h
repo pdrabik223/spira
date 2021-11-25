@@ -17,76 +17,41 @@
 #include <vector>
 #include <sstream>
 #include <optional>
+#include <iostream>
 
-template<class T>
-class Error {
- public:
-//  template<class Tout>
-  static Error<T> error(const std::string &err_msg) { return Error<T>(std::nullopt, err_msg); }
-//  template<class Tout>
-  static Error<T> succes(const T &value) { return Error<T>(value, ""); }
-
-  Error(std::optional<T> value, std::string err_msg) :
-      error_message_(std::move(err_msg)),
-      value_(std::move(value)) {}
-
-  const std::string &GetError() { return error_message_; };
-  const T &GetValue() { return value_.value(); }
-
-  bool IsGood() const { return value_.has_value(); }
-  bool IsError() const { return !IsGood(); }
-
- private:
-  std::optional<T> value_;
-  std::string error_message_;
-};
-template<>
-class Error<void> {
- public:
-//  template<class Tout>
-  static Error<void> error(const std::string &err_msg) { return {false, err_msg}; }
-//  template<class Tout>
-  static Error<void> succes() { return {true, ""}; }
-
-  Error(bool succes, std::string err_msg) :
-      error_message_(std::move(err_msg)), succes_(succes) {}
-
-  const std::string &GetError() { return error_message_; };
-//  GetValue() { return value_.value(); }
-
-  [[nodiscard]] bool IsGood() const { return succes_; }
-  [[nodiscard]] bool IsError() const { return !succes_; }
-
- private:
-  bool succes_ = false;
-  std::string error_message_;
-};
+#include "Error.h"
 
 class SubProcess {
  public:
   SubProcess(std::string program,
              std::vector<std::string> args,
-             std::string path);
+             std::string path,
+             bool auto_start = true);
 
   ~SubProcess();
+
+  void SetArgs(std::vector<std::string> args);
+  Error<void> RunChildProcess(bool wait = false);
+  Error<void> KillChildProcess(int code = 1);
 
   Error<std::string> ReadChildOutput();
   Error<void> SendChildInput(const std::string &input);
 
  protected:
-  Error<void> RunProc(bool wait = false);
   Error<void> CreatePipes();
  private:
 
 #if MK_PLATFORM_WINDOWS
 
-  HANDLE child_prc_;
-  HANDLE child_thread_;
+  Error<void> CloseWindowsHandle(HANDLE handle);
 
-  HANDLE child_std_out_writer_;
-  HANDLE child_std_out_reader_;
-  HANDLE child_std_in_writer_;
-  HANDLE child_std_in_reader_;
+  HANDLE child_prc_{};
+  HANDLE child_thread_{};
+
+  HANDLE child_std_out_writer_{};
+  HANDLE child_std_out_reader_{};
+  HANDLE child_std_in_writer_{};
+  HANDLE child_std_in_reader_{};
 
 #endif
 
