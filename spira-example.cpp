@@ -5,15 +5,21 @@
 #include "SubProcess.h"
 #include <iostream>
 int main() {
+  try {
 
-  Histogram test("test");
-  SubProcess s("root", {"-l", "-e", ".demo"}, "./");
-  std::cout << "=== [ SPIRA ] ===" << std::endl
-            << "Write 'q' to quit" << std::endl;
-  char x;
-  do {
-    std::cout << ">>> ";
-    std::cin >> x;
-    std::cout << std::endl;
-  } while (x != 'q');
+    Histogram test("test");
+    SubProcess s("root", {"-l", "-e", ".demo"}, "./");
+    std::cout << "=== [ SPIRA ] ===" << std::endl
+              << "Write 'q' to quit" << std::endl;
+    char x;
+    do {
+      std::cout << ">>> ";
+      std::cin >> x;
+      std::cout << std::endl;
+    } while (x != 'q');
+
+  } catch (const CustomError &e) {
+    std::cout << "Runtime error: " << e.what() << std::endl;
+    return 1;
+  }
 }
