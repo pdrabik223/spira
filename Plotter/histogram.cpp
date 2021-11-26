@@ -4,7 +4,7 @@
 
 #include "histogram.h"
 Histogram::Histogram(const std::string &plot_title)
-    : plot_title_(plot_title), plot_label_(plot_title) {}
+    : Plot(plot_title), plot_label_(plot_title) {}
 void Histogram::Fill(double value) {
   if (data_.find(value) == data_.end())
     data_.insert({value, 1});
@@ -28,13 +28,6 @@ void Histogram::DeclareCanvas(unsigned int canvas_vertical_offset,
 }
 void Histogram::DeclareHistogram() {
 
-  if (plot_title_.empty())
-    plot_title_ = "plot_title_";
-  if (x_axis_label_.empty())
-    x_axis_label_ = "x_axis_label_";
-  if (y_axis_label_.empty())
-    y_axis_label_ = "y_axis_label_";
-
   if (min_bin_.has_value() and max_bin_.has_value() and bin_count_.has_value())
     generated_script_.push_back("auto histogram = new TH1I(\"" + plot_label_ +
                                 "\",\"" + plot_title_ + ';' + x_axis_label_ +
@@ -52,11 +45,11 @@ void Histogram::DeclareHistogram() {
 }
 void Histogram::AddHistogramSettings() {
 
-  generated_script_.push_back("histogram->SetStats(0);");
+  generated_script_.emplace_back("histogram->SetStats(0);");
   switch (color_) {
 
   case Color::BLUE:
-    generated_script_.push_back("histogram->SetFillColor(38);");
+    generated_script_.emplace_back("histogram->SetFillColor(38);");
     break;
   }
 }
@@ -70,13 +63,13 @@ void Histogram::AddData() {
   }
 }
 void Histogram::AddHistogramDraw() {
-  generated_script_.push_back("histogram->Draw(\"B\");");
+  generated_script_.emplace_back("histogram->Draw(\"B\");");
 }
 void Histogram::AddCanvasDraw() {
-  generated_script_.push_back("c1->BuildLegend();");
-  generated_script_.push_back("c1->Draw();");
+  generated_script_.emplace_back("c1->BuildLegend();");
+  generated_script_.emplace_back("c1->Draw();");
 }
-void Histogram::AddCloseFile() { generated_script_.push_back("}"); }
+void Histogram::AddCloseFile() { generated_script_.emplace_back("}"); }
 void Histogram::GenFile() {
   ClearScript();
   AddHeader();
@@ -88,8 +81,8 @@ void Histogram::GenFile() {
   AddCanvasDraw();
   AddCloseFile();
 
-  std::fstream file("../" + plot_label_ + ".cpp", std::ios::out);
-  for (auto line : generated_script_) {
+  std::fstream file(plot_label_ + ".C", std::ios::out);
+  for (const auto &line : generated_script_) {
     file << line << "\n";
   }
   file.close();

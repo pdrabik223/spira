@@ -29,9 +29,9 @@ public:
   std::optional<double> min_bin_;
   std::optional<double> max_bin_;
   std::optional<unsigned> bin_count_;
-  std::string plot_label_;
-  std::string x_axis_label_ = "";
-  std::string y_axis_label_ = "";
+  std::string plot_label_ = "plot_label";
+  std::string x_axis_label_ = "x_axis_label";
+  std::string y_axis_label_ = "y_axis_label";
 
 
 private:
