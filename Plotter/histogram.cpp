@@ -70,6 +70,8 @@ void Histogram::AddCanvasDraw() {
   generated_script_.emplace_back("c1->Draw();");
 }
 void Histogram::AddCloseFile() { generated_script_.emplace_back("}"); }
+
+
 void Histogram::GenFile() {
   ClearScript();
   AddHeader();
