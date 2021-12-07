@@ -60,4 +60,6 @@ class SubProcess {
   std::string path_;
 };
 
+// some changes 
+
 #endif //SPIRA_PLOTTER_SUBPROCESS_H_
